@@ -9,7 +9,7 @@ import torch
 
 from moses.metrics import get_mol, remove_invalid, \
                           fraction_passes_filters, internal_diversity, \
-                          FCDMetric, SNNMetric, FragMetric, ScafMetric, \
+                          FCDMetric, SNNMetric, FragMetric, ScafMetric, FrechetMetric,\
                           logP, QED, SA, NP, weight
 from moses.utils import mapper
 
@@ -147,7 +147,7 @@ class MetricsReward:
                 if metric_name == 'fcd':
                     m = FCDMetric(n_jobs=self.n_jobs)(ref, rollout)
                 elif metric_name == 'morgan':
-                    m = SNN(n_jobs=self.n_jobs)(ref_mols, rollout_mols)
+                    m = SNNMetric(n_jobs=self.n_jobs)(ref_mols, rollout_mols)
                 elif metric_name == 'fragments':
                     m = FragMetric(n_jobs=self.n_jobs)(ref_mols, rollout_mols)
                 elif metric_name == 'scaffolds':
