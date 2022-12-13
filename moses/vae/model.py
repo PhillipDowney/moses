@@ -123,10 +123,6 @@ class VAE(nn.Module):
 
         x = nn.utils.rnn.pad_sequence(x, batch_first=True,
                                       padding_value=self.pad)
-        x_emb = self.x_emb(x)
-
-        z_0 = z.unsqueeze(1).repeat(1, x_emb.size(1), 1)
-        x_input = torch.cat([x_emb, z_0], dim=-1)
         x_input = nn.utils.rnn.pack_padded_sequence(x_input, lengths,
                                                     batch_first=True)
 
@@ -141,8 +137,9 @@ class VAE(nn.Module):
         recon_loss = F.cross_entropy(
             y[:, :-1].contiguous().view(-1, y.size(-1)),
             x[:, 1:].contiguous().view(-1),
-            ignore_index=self.pad
-        )
+            ignore_index=self.pad,
+            reduction='sum'
+        ) / len(x)
 
         return recon_loss
 
