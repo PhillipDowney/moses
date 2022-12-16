@@ -123,7 +123,8 @@ class VAE(nn.Module):
 
         x = nn.utils.rnn.pad_sequence(x, batch_first=True,
                                       padding_value=self.pad)
-        x_input = nn.utils.rnn.pack_padded_sequence(x_input, lengths,
+        x_emb = self.x_emb(x)
+        x_input = nn.utils.rnn.pack_padded_sequence(x_emb, lengths,
                                                     batch_first=True)
 
         h_0 = self.decoder_lat(z)
