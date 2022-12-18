@@ -186,9 +186,7 @@ class VAE(nn.Module):
             # Generating cycle
             for i in range(1, n_len):
                 x_emb = self.x_emb(w).unsqueeze(1)
-                x_input = torch.cat([x_emb, z_0], dim=-1)
-
-                o, h = self.decoder_rnn(x_input, h)
+                o, h = self.decoder_rnn(x_emb, h)
                 y = self.decoder_fc(o.squeeze(1))
                 y = F.softmax(y / temp, dim=-1)
 
@@ -205,3 +203,11 @@ class VAE(nn.Module):
             x = new_x
 
             return z, x
+
+    def load(self, path: str, map_location: str):
+        """Loading model from `model_path`.
+
+        :param path: path to model.
+        :param map_location: device to load model into.
+        """
+        self.load_state_dict(torch.load(path, map_location=map_location))
