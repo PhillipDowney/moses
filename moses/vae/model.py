@@ -193,7 +193,7 @@ class VAE(nn.Module):
                 w = torch.multinomial(y, 1)[:, 0]
                 x[~eos_mask.bool(), i] = w[~eos_mask.bool()]
                 i_eos_mask = ~eos_mask & (w == self.eos)
-                end_pads[i_eos_mask] = i + 1
+                end_pads[i_eos_mask.bool()] = i + 1
                 eos_mask = eos_mask | i_eos_mask
 
             # Converting `x` to list of tensors
