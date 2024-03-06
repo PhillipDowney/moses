@@ -131,7 +131,7 @@ class AAE(nn.Module):
                 if is_end.sum() == n:
                     break
 
-                currents[is_end, :] = self.vocabulary.pad
+                currents[is_end.bool(), :] = self.vocabulary.pad
                 samples.append(currents.cpu())
                 lengths[~is_end.bool()] += 1
 
